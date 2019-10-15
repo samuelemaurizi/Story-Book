@@ -1,0 +1,15 @@
+{
+  "name": "prj02",
+  "version": "1.0.0",
+  "description": "App to share stories",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Samuele Maurizi",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.7.5"
+  }
+}
