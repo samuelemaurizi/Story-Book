@@ -1,4 +1,5 @@
 const express = require('express');
+const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
@@ -7,6 +8,7 @@ const session = require('express-session');
 require('./models/User');
 require('dotenv').config();
 require('./config/passport')(passport);
+const index = require('./routes/index');
 const auth = require('./routes/auth');
 
 mongoose
@@ -22,6 +24,15 @@ const app = express();
 /////////////////////////////
 // MIDDLEWARES
 /////////////////////////////
+// Handlebars
+app.engine(
+  'handlebars',
+  exphbs({
+    defaultLayout: 'main'
+  })
+);
+app.set('view engine', 'handlebars');
+
 // Cookie Parser
 app.use(cookieParser());
 
@@ -47,10 +58,7 @@ app.use((req, res, next) => {
 /////////////////////////////
 // Routes
 /////////////////////////////
-app.get('/', (req, res) => {
-  res.send('Connected!');
-});
-
+app.use('/', index);
 app.use('/auth', auth);
 
 const port = process.env.PORT || 5000;
