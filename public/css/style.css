@@ -1,0 +1,26 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.nav-wrapper .fa-bars {
+  font-size: 2rem;
+}
+
+.checkBox-color[type='checkbox'].filled-in:checked + span:not(.lever):after {
+  border: 2px solid #8bc34a;
+  background-color: #8bc34a;
+}
+
+.btn-ml {
+  margin-left: -0.75rem;
+}
+
+footer {
+  margin-top: 3rem;
+}

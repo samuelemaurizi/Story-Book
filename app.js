@@ -1,16 +1,22 @@
 const express = require('express');
+const path = require('path');
 const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 require('./models/User');
+require('./models/Story');
+
 require('dotenv').config();
 require('./config/passport')(passport);
+
 const index = require('./routes/index');
 const auth = require('./routes/auth');
 const stories = require('./routes/stories');
+const { truncate, stripTags } = require('./helpers/hbs');
 
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -29,10 +35,21 @@ const app = express();
 app.engine(
   'handlebars',
   exphbs({
+    helpers: {
+      truncate: truncate,
+      stripTags: stripTags
+    },
     defaultLayout: 'main'
   })
 );
 app.set('view engine', 'handlebars');
+
+// Body Parser
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Static Folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Cookie Parser
 app.use(cookieParser());
@@ -53,6 +70,7 @@ app.use(passport.session());
 // Global variables
 app.use((req, res, next) => {
   res.locals.user = req.user || null;
+  res.locals.fullYear = new Date().getFullYear();
   next();
 });
 
