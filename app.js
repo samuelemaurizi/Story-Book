@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
@@ -16,7 +17,7 @@ require('./config/passport')(passport);
 const index = require('./routes/index');
 const auth = require('./routes/auth');
 const stories = require('./routes/stories');
-const { truncate, stripTags } = require('./helpers/hbs');
+const { truncate, stripTags, formatDate, select } = require('./helpers/hbs');
 
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -37,12 +38,17 @@ app.engine(
   exphbs({
     helpers: {
       truncate: truncate,
-      stripTags: stripTags
+      stripTags: stripTags,
+      formatDate: formatDate,
+      select: select
     },
     defaultLayout: 'main'
   })
 );
 app.set('view engine', 'handlebars');
+
+// Method Override
+app.use(methodOverride('_method'));
 
 // Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
