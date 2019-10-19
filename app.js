@@ -17,7 +17,13 @@ require('./config/passport')(passport);
 const index = require('./routes/index');
 const auth = require('./routes/auth');
 const stories = require('./routes/stories');
-const { truncate, stripTags, formatDate, select } = require('./helpers/hbs');
+const {
+  truncate,
+  stripTags,
+  formatDate,
+  select,
+  editIcon
+} = require('./helpers/hbs');
 
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -40,7 +46,8 @@ app.engine(
       truncate: truncate,
       stripTags: stripTags,
       formatDate: formatDate,
-      select: select
+      select: select,
+      editIcon: editIcon
     },
     defaultLayout: 'main'
   })

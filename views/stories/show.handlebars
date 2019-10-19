@@ -1,12 +1,46 @@
 <div class="row">
-  <h3 class="center-align"> {{story.title}} </h3>
   <div class="col s12 m9">
+    <h3 class="center-align"> {{story.title}} 
+      <small> {{{editIcon story.user.id user.id story.id false}}} </small>
+    </h3>
     <div class="card story">
       <div class="card-content">
         <span class="card-title"> {{ formatDate story.date 'MMMM Do YYYY'}} </span>
         {{{story.body}}}
       </div>
     </div>
+    {{#if story.allowComments}}
+      {{#each story.comments}}
+        <div class="card">
+          <div class="card-content">
+            <h5> {{commentsBody}} </h5>
+            <div class="chip">
+              <img src="{{commentUser.image}}" alt="Contact Person">
+              <a href="/stories/user/{{commentUser.id}}">{{commentUser.firstName}} {{commentUser.lastName}}</a> 
+            </div>
+            <br>
+            <small><strong>Posted:</strong> {{formatDate commentDate 'MMMM Do YYYY'}}</small>
+          </div>
+        </div>
+      {{/each}}
+      <div class="card">
+        <div class="card-content">
+          <span class="cart-title">Comments</span>
+          {{#if user}}
+            <form action="/stories/comment/{{story.id}}" method="post">
+              <div class="input-field">
+                <textarea name="commentsBody" class="materialize-textarea"></textarea>
+                <label>Add Comment</label>
+              </div>
+              <input type="submit" value="Submit" class="btn">
+            </form>
+          {{else}}
+            <p><a href="/auth/google">Login</a> if you want leave a comment</p>
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+
   </div>
   <div class="col s12 m3">
     <div class="card center-align">
